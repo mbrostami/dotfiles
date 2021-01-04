@@ -1,2 +1,4 @@
 # workenv
-My work environment setups 
+
+My work environment tools + configurations + aliases + bash scripts ....  
+
