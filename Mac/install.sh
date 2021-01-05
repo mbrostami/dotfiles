@@ -12,6 +12,8 @@ EOF
 }
 
 function start {
+    brew install tig
+    brew install diff-so-fancy
     mkdir -m 755 -p ~/.workenv/
     cp Mac/aliases ~/.workenv/
     sed -i '' 's#. ~/.workenv/.*##g' ~/.zshrc
