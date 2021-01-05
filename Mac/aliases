@@ -3,3 +3,6 @@
 # Open default browser and search for given text in google.com
 # Example: google hello world written in go
 alias google='f(){ v=$@; open https://google.com/search?q="$v";  unset -f f;   }; f'
+
+# Open default browser and search for given text in duckduckgo.com
+alias duck='f(){ v=$@; open https://duckduckgo.com/?q="$v";  unset -f f;    }; f'
