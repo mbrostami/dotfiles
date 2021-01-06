@@ -1,21 +1,19 @@
 #!/bin/bash
 
 function usage {
-    cat <<EOF
+  cat <<EOF
 Usage:
   $0 [command]
 Available commands:
-
-  start                     Initial setup
-  reload                    Reload
+  setup                     Install essentials 
+  reload                    Reload settings
 EOF
-    exit 1
+  exit 1
 }
 
-function start {
+function setup {
     brew install tig
     brew install diff-so-fancy
-    #pip install --user tmuxp
     _gitconfig
     mkdir -m 755 -p ~/.workenv/
     cp source ~/.workenv/
@@ -48,8 +46,8 @@ function _gitconfig {
 }
 
 case $1 in
-    "start")
-       start
+    "setup")
+       setup 
     ;;
     "reload")
        reload
