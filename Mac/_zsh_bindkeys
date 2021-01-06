@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Map ctrl+k for a line up to the history
+bindkey "^k" up-line-or-search
+
+# Map ctrl+j for a line down to the history
+bindkey "^j" down-line-or-search

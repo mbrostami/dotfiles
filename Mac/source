@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for file in ~/.workenv/_*; do
+    source "$file"
+done

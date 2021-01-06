@@ -1,0 +1,17 @@
+#!/bin/bash 
+
+# ssh and run command
+
+# Git
+## update master
+function masterpull() {
+    B=$(git rev-parse --abbrev-ref HEAD)
+    git checkout master
+    git pull
+    git checkout $B
+}
+## update master + rebase
+function rebasemaster() {
+    masterpull()
+    git rebase master
+}

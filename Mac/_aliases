@@ -6,3 +6,12 @@ alias google='f(){ v=$@; open https://google.com/search?q="$v";  unset -f f;   }
 
 # Open default browser and search for given text in duckduckgo.com
 alias duck='f(){ v=$@; open https://duckduckgo.com/?q="$v";  unset -f f;    }; f'
+
+
+# Git aliases
+
+## checkout master - pull - checkout back to the current branch
+alias gup=masterpull
+
+## checkout master - pull - checkout back to the current branch - rebase
+alias gupr=rebasemaster
