@@ -3,6 +3,7 @@
 # ssh and run command
 
 # Git
+
 ## update master
 function masterpull() {
     B=$(git rev-parse --abbrev-ref HEAD)
@@ -10,8 +11,23 @@ function masterpull() {
     git pull
     git checkout $B
 }
+
+## update develop
+function developpull() {
+    B=$(git rev-parse --abbrev-ref HEAD)
+    git checkout develop
+    git pull
+    git checkout $B
+}
+
 ## update master + rebase
 function rebasemaster() {
     masterpull()
     git rebase master
+}
+
+## update develop + rebase
+function rebasedevelop() {
+    developpull()
+    git rebase develop
 }

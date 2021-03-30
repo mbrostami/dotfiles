@@ -11,7 +11,13 @@ alias duck='f(){ v=$@; open https://duckduckgo.com/?q="$v";  unset -f f;    }; f
 # Git aliases
 
 ## checkout master - pull - checkout back to the current branch
-alias gup=masterpull
+alias gmp=masterpull
+
+## checkout develop - pull - checkout back to the current branch
+alias gdp=developpull
 
 ## checkout master - pull - checkout back to the current branch - rebase
-alias gupr=rebasemaster
+alias gmpr=rebasemaster
+
+## checkout develop - pull - checkout back to the current branch - rebase
+alias gdpr=rebasedevelop
