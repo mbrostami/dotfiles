@@ -1,0 +1,3 @@
+alias "fzf100=fzf --height 100% --preview 'bat --color=always --style=numbers --line-range=:500 {}'"
+alias "fif=egrep --line-buffered -ir '' * | fzf --height 50% | cut -d':' -f 1"
+export FZF_DEFAULT_OPTS='--multi --height 1% --layout=reverse --border --preview "bat --style=numbers --color=always --line-range :500 {}"'

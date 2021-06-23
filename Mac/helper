@@ -16,6 +16,11 @@ function setup {
     brew install diff-so-fancy
     brew install bat 
     brew install fzf
+    brew install fd
+    # install oh-my-zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    # install powerlevel10k
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
     _gitconfig
     mkdir -m 755 -p ~/.workenv/
     cp source ~/.workenv/
