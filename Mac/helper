@@ -14,6 +14,8 @@ EOF
 function setup {
     brew install tig
     brew install diff-so-fancy
+    brew install bat 
+    brew install fzf
     _gitconfig
     mkdir -m 755 -p ~/.workenv/
     cp source ~/.workenv/
