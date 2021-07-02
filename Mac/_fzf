@@ -1,10 +1,88 @@
+export EDITOR=vim
+
 alias "fzf100=fzf --height 100% --preview 'bat --color=always --style=numbers --line-range=:500 {}'"
+
 alias "fif=egrep --line-buffered -ir '' * | fzf --height 50% | cut -d':' -f 1"
+
 export FZF_DEFAULT_OPTS='--multi --height 1% --layout=reverse --border --preview "bat --style=numbers --color=always --line-range :500 {}"'
-# fbr - checkout git branch
-fbr() {
-  local branches branch
-  branches=$(git branch) &&
-  branch=$(echo "$branches" | fzf-tmux -d 15 +m) &&
-  git checkout $(echo "$branch" | sed "s/.* //")
+
+
+
+
+
+
+# https://bluz71.github.io/2018/11/26/fuzzy-finding-in-bash-with-fzf.html
+fzf_find_edit() {
+    local file=$(
+      fzf --query="$1" --no-multi --select-1 --exit-0 \
+          --preview 'bat --color=always --line-range :500 {}'
+      )
+    if [[ -n $file ]]; then
+        $EDITOR "$file"
+    fi
 }
+alias ffe='fzf_find_edit'
+
+fzf_change_directory() {
+    local directory=$(
+      fd --type d | \
+      fzf --query="$1" --no-multi --select-1 --exit-0 \
+          --preview 'tree -C {} | head -100'
+      )
+    if [[ -n $directory ]]; then
+        cd "$directory"
+    fi
+}
+alias fcd='fzf_change_directory'
+
+fzf_grep_edit(){
+    if [[ $# == 0 ]]; then
+        echo 'Error: search term was not provided.'
+        return
+    fi
+    local match=$(
+      rg --color=never --line-number "$1" |
+        fzf --no-multi --delimiter : \
+            --preview "bat --color=always --line-range {2}: {1}"
+      )
+    local file=$(echo "$match" | cut -d':' -f1)
+    if [[ -n $file ]]; then
+        $EDITOR "$file" +$(echo "$match" | cut -d':' -f2)
+    fi
+}
+alias fge='fzf_grep_edit'
+
+
+fzf_git_log() {
+    local selections=$(
+      git ll --color=always "$@" |
+        fzf --ansi --no-sort --no-height \
+            --preview "echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
+                       xargs -I@ sh -c 'git show --color=always @'"
+      )
+    if [[ -n $selections ]]; then
+        local commits=$(echo "$selections" | sed 's/^[* |]*//' | cut -d' ' -f1 | tr '\n' ' ')
+        git show $commits
+    fi
+}
+alias gll='fzf_git_log'
+
+fzf_kill() {
+    local pid_col
+    if [[ $(uname) = Linux ]]; then
+        pid_col=2
+    elif [[ $(uname) = Darwin ]]; then
+        pid_col=3;
+    else
+        echo 'Error: unknown platform'
+        return
+    fi
+    local pids=$(
+      ps -f -u $USER | sed 1d | fzf --multi | tr -s [:blank:] | cut -d' ' -f"$pid_col"
+      )
+    if [[ -n $pids ]]; then
+        echo "$pids" | xargs kill -9 "$@"
+    fi
+}
+
+alias fkill='fzf_kill'
