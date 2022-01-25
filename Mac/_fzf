@@ -39,10 +39,6 @@ fzf_change_directory() {
 alias fcd='fzf_change_directory'
 
 fzf_grep_edit(){
-    if [[ $# == 0 ]]; then
-        echo 'Error: search term was not provided.'
-        return
-    fi
     local match=$(
       rg --color=never --line-number "$1" |
         fzf --no-multi --delimiter : \
