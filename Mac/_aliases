@@ -8,6 +8,9 @@ alias google='f(){ v=$@; open https://google.com/search?q="$v";  unset -f f;   }
 alias duck='f(){ v=$@; open https://duckduckgo.com/?q="$v";  unset -f f;    }; f'
 
 
+# clear 
+alias c='clear'
+
 # Git aliases
 
 ## checkout master - pull - checkout back to the current branch
@@ -21,3 +24,6 @@ alias gmpr=rebasemaster
 
 ## checkout develop - pull - checkout back to the current branch - rebase
 alias gdpr=rebasedevelop
+
+# cloud shell
+alias gshell="gcloud cloud-shell ssh --authorize-session"
