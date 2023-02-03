@@ -12,15 +12,15 @@ EOF
 }
 
 function setup {
-    brew install tig
-    brew install diff-so-fancy
-    brew install bat 
-    brew install fzf
-    brew install fd
+    brew install tig rg diff-so-fancy bat fd
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+
     # install oh-my-zsh
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     # install powerlevel10k
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    sed -i '' 's#^ZSH_THEME=.*#ZSH_THEME="powerlevel10k/powerlevel10k"#g' ~/.zshrc
     _gitconfig
     mkdir -m 755 -p ~/.workenv/
     cp source ~/.workenv/
