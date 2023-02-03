@@ -12,7 +12,10 @@ EOF
 }
 
 function setup {
-    brew install tig rg diff-so-fancy bat fd
+    brew install tig rg diff-so-fancy bat fd tmux
+
+    # quick look extentions
+    # brew install --cask qlimagesize  qlstephen
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install
 
@@ -22,17 +25,18 @@ function setup {
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
     sed -i '' 's#^ZSH_THEME=.*#ZSH_THEME="powerlevel10k/powerlevel10k"#g' ~/.zshrc
     _gitconfig
-    mkdir -m 755 -p ~/.workenv/
-    cp source ~/.workenv/
-    sed -i '' '/\/\.workenv\/source/d' ~/.zshrc
-    echo ". ~/.workenv/source" >> ~/.zshrc
+    mkdir -m 755 -p ~/.dotfiles/
+    cp source ~/.dotfiles/
+    sed -i '' '/\/\.dotfiles\/source/d' ~/.zshrc
+    echo ". ~/.dotfiles/source" >> ~/.zshrc
     reload
 }
 
 function reload {
     _gitconfig
-    rm ~/.workenv/_*
-    cp _* ~/.workenv/
+    zsh -c "rm ~/.dotfiles/.*"
+    zsh -c "cp .* ~/.dotfiles/"
+    zsh -c "source ~/.zshrc"
 }
 
 function _gitconfig {

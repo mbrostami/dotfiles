@@ -1,5 +1,5 @@
 #!/bin/bash
 
-for file in ~/.workenv/_*; do
+for file in ~/.dotfiles/.*; do
     source "$file"
 done
