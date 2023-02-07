@@ -41,7 +41,7 @@ alias fcd='fzf_change_directory'
 fzf_grep_edit(){
     local match=$(
       rg --color=never --line-number "$1" |
-        fzf --no-multi --delimiter : \
+        fzf100 --no-multi --delimiter : \
             --preview "bat --color=always --line-range {2}: {1}"
       )
     local file=$(echo "$match" | cut -d':' -f1)
