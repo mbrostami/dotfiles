@@ -23,19 +23,22 @@ function setup {
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     # install powerlevel10k
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     sed -i '' 's#^ZSH_THEME=.*#ZSH_THEME="powerlevel10k/powerlevel10k"#g' ~/.zshrc
-    _gitconfig
-    mkdir -m 755 -p ~/.dotfiles/
-    cp source ~/.dotfiles/
-    sed -i '' '/\/\.dotfiles\/source/d' ~/.zshrc
-    echo ". ~/.dotfiles/source" >> ~/.zshrc
     reload
 }
 
 function reload {
     _gitconfig
-    zsh -c "rm ~/.dotfiles/.*"
+    zsh -c "rm -rf ~/.dotfiles"
+    mkdir -m 755 -p ~/.dotfiles/
+    cp source ~/.dotfiles/
     zsh -c "cp .* ~/.dotfiles/"
+    zsh -c "cp vimrc ~/.dotfiles/"
+    sed -i '' '/\/\.dotfiles\/source/d' ~/.zshrc
+    sed -i '' '/\/\.dotfiles\/vimrc/d' ~/.vimrc
+    echo ". ~/.dotfiles/source" >> ~/.zshrc
+    echo "source ~/.dotfiles/vimrc" >> ~/.vimrc
     zsh -c "source ~/.zshrc"
 }
 
