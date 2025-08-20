@@ -12,71 +12,72 @@ EOF
 }
 
 function setup {
-    brew install tig rg diff-so-fancy bat fd tmux
+  brew install tig rg diff-so-fancy bat fd tmux neovim eza
 
-    # quick look extentions
-    # brew install --cask qlimagesize  qlstephen
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install
+  # install lazyvim
+  git clone https://github.com/LazyVim/starter ~/.config/nvim
 
-    # install oh-my-zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  # quick look extentions
+  # brew install --cask qlimagesize  qlstephen
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install
 
-    # install shell integration for iterm2
-    curl -L https://iterm2.com/shell_integration/install_shell_integration.sh | bash
+  # install oh-my-zsh
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-    # install powerlevel10k
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    sed -i '' 's#^ZSH_THEME=.*#ZSH_THEME="powerlevel10k/powerlevel10k"#g' ~/.zshrc
-    reload
+  # install shell integration for iterm2
+  curl -L https://iterm2.com/shell_integration/install_shell_integration.sh | bash
+
+  # install powerlevel10k
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  sed -i '' 's#^ZSH_THEME=.*#ZSH_THEME="powerlevel10k/powerlevel10k"#g' ~/.zshrc
+  reload
 }
 
 function reload {
-    _gitconfig
-    zsh -c "rm -rf ~/.dotfiles"
-    mkdir -m 755 -p ~/.dotfiles/
-    cp source ~/.dotfiles/
-    zsh -c "cp .* ~/.dotfiles/"
-    zsh -c "cp vimrc ~/.dotfiles/"
-    sed -i '' '/\/\.dotfiles\/source/d' ~/.zshrc
-    sed -i '' '/\/\.dotfiles\/vimrc/d' ~/.vimrc
-    echo ". ~/.dotfiles/source" >> ~/.zshrc
-    echo "source ~/.dotfiles/vimrc" >> ~/.vimrc
-    zsh -c "source ~/.zshrc"
+  _gitconfig
+  zsh -c "rm -rf ~/.dotfiles"
+  mkdir -m 755 -p ~/.dotfiles/
+  cp source ~/.dotfiles/
+  zsh -c "cp .* ~/.dotfiles/"
+  zsh -c "cp vimrc ~/.dotfiles/"
+  sed -i '' '/\/\.dotfiles\/source/d' ~/.zshrc
+  sed -i '' '/\/\.dotfiles\/vimrc/d' ~/.vimrc
+  echo ". ~/.dotfiles/source" >>~/.zshrc
+  echo "source ~/.dotfiles/vimrc" >>~/.vimrc
+  zsh -c "source ~/.zshrc"
 }
 
 function _gitconfig {
-   git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
-   git config --global color.ui true
+  git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+  git config --global color.ui true
 
-   git config --global color.diff-highlight.oldNormal    "red bold"
-   git config --global color.diff-highlight.oldHighlight "red bold 52"
-   git config --global color.diff-highlight.newNormal    "green bold"
-   git config --global color.diff-highlight.newHighlight "green bold 22"
+  git config --global color.diff-highlight.oldNormal "red bold"
+  git config --global color.diff-highlight.oldHighlight "red bold 52"
+  git config --global color.diff-highlight.newNormal "green bold"
+  git config --global color.diff-highlight.newHighlight "green bold 22"
 
-   git config --global color.diff.meta       "11"
-   git config --global color.diff.frag       "magenta bold"
-   git config --global color.diff.commit     "yellow bold"
-   git config --global color.diff.old        "red bold"
-   git config --global color.diff.new        "green bold"
-   git config --global color.diff.whitespace "red reverse"
+  git config --global color.diff.meta "11"
+  git config --global color.diff.frag "magenta bold"
+  git config --global color.diff.commit "yellow bold"
+  git config --global color.diff.old "red bold"
+  git config --global color.diff.new "green bold"
+  git config --global color.diff.whitespace "red reverse"
 }
 
 case $1 in
-    "setup")
-       setup 
-    ;;
-    "reload")
-       reload
-    ;;
-   *)
-        if [ $# -eq 1 ]
-        then
-            $0 | grep $1
-        else
-            usage
-        fi
-   ;;
+"setup")
+  setup
+  ;;
+"reload")
+  reload
+  ;;
+*)
+  if [ $# -eq 1 ]; then
+    $0 | grep $1
+  else
+    usage
+  fi
+  ;;
 esac
-
