@@ -8,8 +8,11 @@ alias google='f(){ v=$@; open https://google.com/search?q="$v";  unset -f f;   }
 alias duck='f(){ v=$@; open https://duckduckgo.com/?q="$v";  unset -f f;    }; f'
 
 
-# clear 
+# clear
 alias c='clear'
+
+# zellij
+alias z='zellij'
 
 # Git aliases
 

@@ -154,6 +154,14 @@
       "Action" : 10,
       "Text" : "bb",
       "Escaping" : 2
+    },
+    "0x20-0x40000" : {
+      "Action" : 11,
+      "Text" : "0x00"
+    },
+    "0x7c-0x60000" : {
+      "Action" : 11,
+      "Text" : "0x1c"
     }
   },
   "Visual Bell" : true,

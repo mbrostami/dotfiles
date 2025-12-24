@@ -1,0 +1,15 @@
+keybindings {
+    normal {
+        // Split pane horizontally (new pane below) with Ctrl+|
+        bind "Ctrl |" {
+            NewPane "Down";
+            SwitchToMode "Normal";
+        }
+
+        // Split pane vertically (new pane to right) with Ctrl+Space
+        bind "Ctrl Space" {
+            NewPane "Right";
+            SwitchToMode "Normal";
+        }
+    }
+}

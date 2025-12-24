@@ -1,52 +1,117 @@
 #!/bin/bash
 
+set -e
+
 function usage {
   cat <<EOF
 Usage:
   $0 [command]
+
 Available commands:
-  setup                     Install essentials 
-  reload                    Reload settings
+  setup       Install essential tools and configurations
+  reload      Reload dotfiles and settings
+
 EOF
   exit 1
 }
 
 function setup {
-  brew install tig rg diff-so-fancy bat fd tmux neovim eza
+  # Check if Homebrew is installed
+  if ! command -v brew &> /dev/null; then
+    echo "Homebrew not found. Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-  # install lazyvim
-  git clone https://github.com/LazyVim/starter ~/.config/nvim
+    # Add Homebrew to PATH for Apple Silicon Macs
+    if [[ $(uname -m) == 'arm64' ]]; then
+      echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
+  else
+    echo "Homebrew already installed, updating..."
+    brew update
+  fi
 
-  # quick look extentions
-  # brew install --cask qlimagesize  qlstephen
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-  ~/.fzf/install
+  echo "Installing essential tools via Homebrew..."
+  brew install \
+    tig \
+    rg \
+    diff-so-fancy \
+    bat \
+    fd \
+    tmux \
+    zellij \
+    neovim \
+    eza
 
-  # install oh-my-zsh
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  echo "Setting up LazyVim..."
+  if [ ! -d ~/.config/nvim ]; then
+    git clone https://github.com/LazyVim/starter ~/.config/nvim
+  else
+    echo "LazyVim already installed, skipping..."
+  fi
 
-  # install shell integration for iterm2
+  echo "Installing fzf..."
+  if [ ! -d ~/.fzf ]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+  else
+    echo "fzf already installed, skipping..."
+  fi
+
+  echo "Installing oh-my-zsh..."
+  if [ ! -d ~/.oh-my-zsh ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  else
+    echo "oh-my-zsh already installed, skipping..."
+  fi
+
+  echo "Installing iTerm2 shell integration..."
   curl -L https://iterm2.com/shell_integration/install_shell_integration.sh | bash
 
-  # install powerlevel10k
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-  curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  echo "Installing powerlevel10k theme..."
+  if [ ! -d ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k ]; then
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+  else
+    echo "powerlevel10k already installed, skipping..."
+  fi
+
+  echo "Installing vim-plug..."
+  if [ ! -f ~/.vim/autoload/plug.vim ]; then
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  else
+    echo "vim-plug already installed, skipping..."
+  fi
+
+  echo "Configuring zsh theme..."
   sed -i '' 's#^ZSH_THEME=.*#ZSH_THEME="powerlevel10k/powerlevel10k"#g' ~/.zshrc
+
+  echo "Setup complete! Running reload..."
   reload
 }
 
 function reload {
+  echo "Configuring git..."
   _gitconfig
-  zsh -c "rm -rf ~/.dotfiles"
+
+  echo "Copying dotfiles to ~/.dotfiles..."
+  rm -rf ~/.dotfiles
   mkdir -m 755 -p ~/.dotfiles/
   cp source ~/.dotfiles/
-  zsh -c "cp .* ~/.dotfiles/"
-  zsh -c "cp vimrc ~/.dotfiles/"
+  cp .* ~/.dotfiles/ 2>/dev/null || true
+  cp vimrc ~/.dotfiles/
+
+  echo "Configuring zellij..."
+  mkdir -m 755 -p ~/.config/zellij/
+  cp zellij-config.kdl ~/.config/zellij/config.kdl
+
+  echo "Updating shell configuration..."
   sed -i '' '/\/\.dotfiles\/source/d' ~/.zshrc
   sed -i '' '/\/\.dotfiles\/vimrc/d' ~/.vimrc
-  echo ". ~/.dotfiles/source" >>~/.zshrc
-  echo "source ~/.dotfiles/vimrc" >>~/.vimrc
-  zsh -c "source ~/.zshrc"
+  echo ". ~/.dotfiles/source" >> ~/.zshrc
+  echo "source ~/.dotfiles/vimrc" >> ~/.vimrc
+
+  echo "Dotfiles reloaded successfully!"
+  echo "Run 'source ~/.zshrc' to apply changes to current shell"
 }
 
 function _gitconfig {
